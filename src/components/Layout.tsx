@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 import { useTheme } from '../context/ThemeContext';
+import logo from '../assets/logo_MIM.png';
 
 export default function Layout() {
     const { isDark, toggleTheme } = useTheme();
@@ -47,7 +48,7 @@ export default function Layout() {
                 }`}>
                 <div className="flex h-16 items-center justify-between px-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 transition-colors">
                     <img
-                        src="/src/assets/logo_MIM.png"
+                        src={logo}
                         alt="MIM Group Foselev"
                         className="h-10 object-contain transition-opacity duration-300 brightness-110"
                     />

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiService } from '../services/api';
+import logo from '../assets/logo_MIM.png';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ const LoginPage = () => {
             <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg border border-transparent dark:border-gray-700">
                 <div className="text-center">
                     <img
-                        src="/src/assets/logo_MIM.png"
+                        src={logo}
                         alt="Logo Groupe MIM"
                         className="h-16 w-auto mx-auto mb-4 object-contain brightness-100 dark:brightness-110"
                     />

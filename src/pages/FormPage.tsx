@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { apiService } from '../services/api';
 import { Link } from 'react-router-dom';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../context/ThemeContext';
+import logo from '../assets/logo_MIM.png';
 
 const FormPage = () => {
+    const { isDark, toggleTheme } = useTheme();
     const [formData, setFormData] = useState({
         societe: '',
         date: new Date().toISOString().split('T')[0],
@@ -76,11 +80,21 @@ const FormPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50/30 dark:from-gray-900 dark:to-orange-900/10 flex flex-col transition-colors duration-200">
             <div className="flex-grow py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-                <div className="max-w-3xl w-full space-y-8">
+                <div className="max-w-3xl w-full space-y-8 relative">
+                    <div className="absolute top-0 right-0 z-10">
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors hover:bg-white dark:hover:bg-gray-800"
+                            title={isDark ? "Passer en mode clair" : "Passer en mode sombre"}
+                        >
+                            {isDark ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
+                        </button>
+                    </div>
+
                     {/* Header with Logo */}
                     <div className="text-center transform transition-all hover:scale-[1.01] duration-500">
                         <img
-                            src="/src/assets/logo_MIM.png"
+                            src={logo}
                             alt="Logo MIM"
                             className="mx-auto h-20 w-auto mb-6 drop-shadow-sm brightness-100 dark:brightness-110"
                         />
@@ -319,6 +333,7 @@ const FormPage = () => {
             </div>
 
             {/* Footer */}
+
             <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-8 transition-colors">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <p className="text-gray-400 text-sm mb-4">

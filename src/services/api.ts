@@ -1,6 +1,11 @@
 import type { LoginResponse, Feedback } from '../types';
 
-const API_URL = 'http://localhost:3000/api';
+const getBaseUrl = () => {
+    if (typeof window === 'undefined') return 'http://localhost:3000/api';
+    return `http://${window.location.hostname}:3000/api`;
+};
+
+const API_URL = getBaseUrl();
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');

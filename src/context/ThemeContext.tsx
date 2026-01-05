@@ -10,8 +10,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [isDark, setIsDark] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') === 'dark' ||
-                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const savedTheme = localStorage.getItem('theme');
+            return savedTheme === 'dark'; // Only return true if explicitly set to dark
         }
         return false;
     });
