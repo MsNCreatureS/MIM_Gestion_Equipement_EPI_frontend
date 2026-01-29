@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import { Link } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
@@ -20,6 +20,21 @@ const FormPage = () => {
     const [otherType, setOtherType] = useState('');
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [problemTypes, setProblemTypes] = useState<string[]>([]);
+
+    useEffect(() => {
+        const loadTypes = async () => {
+            try {
+                const types = await apiService.getTypes();
+                setProblemTypes([...types.map(t => t.label), 'Autre']);
+            } catch (err) {
+                console.error("Failed to load types", err);
+                // Fallback to default types if API fails
+                setProblemTypes(['AMELIORATION', 'NON CONFORMITE', 'SITUATION DANGEREUSE', 'INFORMATION SUITE A UNE CAUSERIE', 'Autre']);
+            }
+        };
+        loadTypes();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -216,8 +231,12 @@ const FormPage = () => {
                                     <legend className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-4">
                                         5. TYPE : PROBLÈME RENCONTRÉ <span className="text-primary">*</span>
                                     </legend>
+
+
+                                    // ... existing code ...
+
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {['AMELIORATION', 'NON CONFORMITE', 'SITUATION DANGEREUSE', 'INFORMATION SUITE A UNE CAUSERIE', 'Autre'].map((type) => (
+                                        {problemTypes.map((type) => (
                                             <label
                                                 key={type}
                                                 className={`relative flex items-center p-4 rounded-xl border cursor-pointer transition-all duration-200 ${formData.type === type

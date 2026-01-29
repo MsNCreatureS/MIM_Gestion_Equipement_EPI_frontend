@@ -124,4 +124,49 @@ export const apiService = {
 
         return response.json();
     },
+
+    // Problem Types
+    getTypes: async (): Promise<{ id: number; label: string; is_active: boolean }[]> => {
+        const response = await fetch(`${API_URL}/types`);
+        if (!response.ok) throw new Error('Failed to fetch types');
+        return response.json();
+    },
+
+    getAdminTypes: async (): Promise<{ id: number; label: string; is_active: boolean; created_at: string }[]> => {
+        const response = await fetch(`${API_URL}/admin/types`, { headers: getHeaders() });
+        if (!response.ok) throw new Error('Failed to fetch types');
+        return response.json();
+    },
+
+    createType: async (label: string): Promise<void> => {
+        const response = await fetch(`${API_URL}/admin/types`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ label }),
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to create type');
+        }
+    },
+
+    updateType: async (id: number, data: { label?: string; is_active?: boolean }): Promise<void> => {
+        const response = await fetch(`${API_URL}/admin/types/${id}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to update type');
+        }
+    },
+
+    deleteType: async (id: number): Promise<void> => {
+        const response = await fetch(`${API_URL}/admin/types/${id}`, {
+            method: 'DELETE',
+            headers: getHeaders(),
+        });
+        if (!response.ok) throw new Error('Failed to delete type');
+    },
 };

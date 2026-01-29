@@ -5,6 +5,7 @@ import FormPage from './pages/FormPage';
 import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminFeedbackDetails from './pages/AdminFeedbackDetails';
+import AdminTypesPage from './pages/AdminTypesPage';
 import PublicRequestsPage from './pages/PublicRequestsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
@@ -22,6 +23,7 @@ function App() {
             {/* Admin Routes wrapped in Layout */}
             <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/types" element={<AdminTypesPage />} />
               <Route path="/admin/feedback/:id" element={<AdminFeedbackDetails />} />
             </Route>
           </Routes>

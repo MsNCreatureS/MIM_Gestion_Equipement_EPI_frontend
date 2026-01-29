@@ -8,6 +8,7 @@ import {
     ArrowRightOnRectangleIcon,
     UserCircleIcon,
     SunIcon,
+    AdjustmentsHorizontalIcon,
     MoonIcon
 } from '@heroicons/react/24/outline';
 
@@ -30,7 +31,7 @@ export default function Layout() {
     // Adapting navigation for the current app
     const navigation = [
         { name: 'Tableau de bord', href: '/admin', icon: HomeIcon },
-        // Add other links here if needed in the future, e.g. { name: 'Historique', href: '/history', icon: ClipboardDocumentListIcon },
+        { name: 'Types de problèmes', href: '/admin/types', icon: AdjustmentsHorizontalIcon },
     ];
 
     return (
