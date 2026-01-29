@@ -1,6 +1,9 @@
 import type { LoginResponse, Feedback } from '../types';
 
 const getBaseUrl = () => {
+    if (import.meta.env.VITE_API_URL) {
+        return import.meta.env.VITE_API_URL;
+    }
     if (typeof window === 'undefined') return 'http://localhost:3000/api';
     return `http://${window.location.hostname}:3000/api`;
 };
