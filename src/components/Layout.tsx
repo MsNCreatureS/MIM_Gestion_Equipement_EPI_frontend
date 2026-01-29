@@ -32,6 +32,7 @@ export default function Layout() {
     const navigation = [
         { name: 'Tableau de bord', href: '/admin', icon: HomeIcon },
         { name: 'Types de problèmes', href: '/admin/types', icon: AdjustmentsHorizontalIcon },
+        { name: 'Retour au formulaire', href: '/', icon: ArrowRightOnRectangleIcon },
     ];
 
     return (
@@ -48,11 +49,13 @@ export default function Layout() {
             <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}>
                 <div className="flex h-16 items-center justify-between px-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 transition-colors">
-                    <img
-                        src={logo}
-                        alt="MIM Group Foselev"
-                        className="h-10 object-contain transition-opacity duration-300 brightness-110"
-                    />
+                    <Link to="/admin" className="flex items-center">
+                        <img
+                            src={logo}
+                            alt="MIM Group Foselev"
+                            className="h-10 object-contain transition-opacity duration-300 brightness-110"
+                        />
+                    </Link>
                     <button
                         onClick={() => setSidebarOpen(false)}
                         className="lg:hidden p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"

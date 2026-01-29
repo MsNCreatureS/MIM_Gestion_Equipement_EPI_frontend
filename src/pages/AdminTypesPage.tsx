@@ -101,7 +101,7 @@ const AdminTypesPage = () => {
                             value={newTypeLabel}
                             onChange={(e) => setNewTypeLabel(e.target.value)}
                             placeholder="Ex: PROBLÈME ÉLECTRIQUE"
-                            className="flex-1 rounded-lg border-gray-300 dark:border-gray-600 py-2.5 px-4 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"
+                            className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white py-2.5 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder-gray-400"
                         />
                         <button
                             type="submit"
@@ -143,8 +143,8 @@ const AdminTypesPage = () => {
                                             <button
                                                 onClick={() => handleToggleActive(type)}
                                                 className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors ${type.is_active
-                                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200'
-                                                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 hover:bg-red-200'
+                                                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200'
+                                                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 hover:bg-red-200'
                                                     }`}
                                             >
                                                 {type.is_active ? (

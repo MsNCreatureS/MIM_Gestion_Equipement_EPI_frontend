@@ -233,7 +233,7 @@ const FormPage = () => {
                                     </legend>
 
 
-                                    // ... existing code ...
+
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {problemTypes.map((type) => (
