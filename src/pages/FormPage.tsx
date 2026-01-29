@@ -8,7 +8,7 @@ import logo from '../assets/logo_MIM.png';
 const FormPage = () => {
     const { isDark, toggleTheme } = useTheme();
     const [formData, setFormData] = useState({
-        societe: '',
+        societe: 'MIM',
         date: new Date().toISOString().split('T')[0],
         nom: '',
         prenom: '',
@@ -39,7 +39,7 @@ const FormPage = () => {
             setStatus('success');
             setOtherType('');
             setFormData({
-                societe: '',
+                societe: 'MIM',
                 date: new Date().toISOString().split('T')[0],
                 nom: '',
                 prenom: '',
@@ -126,18 +126,15 @@ const FormPage = () => {
                                     {/* Societe */}
                                     <div className="col-span-1 sm:col-span-2">
                                         <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                                            1. SOCIÉTÉ / AGENCE <span className="text-primary">*</span>
+                                            1. SOCIÉTÉ / AGENCE
                                         </label>
-                                        <select
+                                        <input
+                                            type="text"
                                             name="societe"
-                                            value={formData.societe}
-                                            onChange={handleChange}
-                                            required
-                                            className="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary py-3 px-4 bg-gray-50 dark:bg-gray-700 dark:text-white hover:bg-white dark:hover:bg-gray-600 transition-colors cursor-pointer"
-                                        >
-                                            <option value="">Sélectionnez...</option>
-                                            <option value="MIM">MIM</option>
-                                        </select>
+                                            value="MIM"
+                                            readOnly
+                                            className="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm py-3 px-4 bg-gray-100 dark:bg-gray-600 dark:text-white cursor-not-allowed font-semibold text-gray-700"
+                                        />
                                     </div>
 
                                     {/* Date */}
@@ -280,7 +277,7 @@ const FormPage = () => {
                                 {/* Action */}
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                                        7. ACTION
+                                        7. ACTION À RÉALISER
                                     </label>
                                     <textarea
                                         name="action"
@@ -327,6 +324,17 @@ const FormPage = () => {
                                     'ENVOYER LA FICHE'
                                 )}
                             </button>
+
+                            {/* Button to view pending requests */}
+                            <Link
+                                to="/demandes"
+                                className="w-full flex justify-center items-center py-3 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 font-medium hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition-all mt-4"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                Voir les demandes en cours
+                            </Link>
                         </form>
                     </div>
                 </div>

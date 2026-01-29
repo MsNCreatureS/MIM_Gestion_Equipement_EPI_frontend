@@ -84,4 +84,41 @@ export const apiService = {
             throw new Error(error.message || 'Failed to delete feedback');
         }
     },
+
+    getPublicFeedback: async (): Promise<Feedback[]> => {
+        const response = await fetch(`${API_URL}/feedback/public`);
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to fetch public feedback');
+        }
+
+        return response.json();
+    },
+
+    updateAdminAction: async (id: number, actionAdmin: string): Promise<void> => {
+        const response = await fetch(`${API_URL}/feedback/${id}/admin-action`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify({ action_admin: actionAdmin }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to update admin action');
+        }
+    },
+
+    getFeedbackById: async (id: number): Promise<Feedback> => {
+        const response = await fetch(`${API_URL}/feedback/${id}`, {
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to fetch feedback details');
+        }
+
+        return response.json();
+    },
 };

@@ -16,6 +16,7 @@ export interface Feedback {
     type_probleme: string;
     description: string;
     action: string;
+    action_admin: string;
     status: string;
     created_at: string;
 }

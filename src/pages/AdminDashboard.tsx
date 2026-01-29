@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 import type { Feedback } from '../types';
 import {
     MagnifyingGlassIcon,
     ExclamationTriangleIcon,
     EyeIcon,
-    XMarkIcon,
-    CalendarIcon,
-    UserIcon,
-    BuildingOfficeIcon,
-    TagIcon,
     TrashIcon
 } from '@heroicons/react/24/outline';
 
 const AdminDashboard = () => {
+    const navigate = useNavigate();
     const [feedbackList, setFeedbackList] = useState<Feedback[]>([]);
     const [filteredFeedback, setFilteredFeedback] = useState<Feedback[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
-    const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
     const [deletingFeedback, setDeletingFeedback] = useState<Feedback | null>(null);
 
     useEffect(() => {
@@ -67,11 +63,6 @@ const AdminDashboard = () => {
         try {
             await apiService.updateStatus(id, newStatus);
             setFeedbackList(prev => prev.map(item => item.id === id ? { ...item, status: newStatus } : item));
-
-            // Update selected feedback if it's currently open
-            if (selectedFeedback && selectedFeedback.id === id) {
-                setSelectedFeedback(prev => prev ? { ...prev, status: newStatus } : null);
-            }
         } catch (err) {
             console.error(err);
             alert("Erreur lors de la mise à jour du statut");
@@ -85,11 +76,6 @@ const AdminDashboard = () => {
             await apiService.deleteFeedback(deletingFeedback.id);
             setFeedbackList(prev => prev.filter(item => item.id !== deletingFeedback.id));
             setDeletingFeedback(null);
-
-            // Close details modal if the deleted item was open
-            if (selectedFeedback && selectedFeedback.id === deletingFeedback.id) {
-                setSelectedFeedback(null);
-            }
         } catch (err) {
             console.error(err);
             alert("Erreur lors de la suppression");
@@ -185,7 +171,7 @@ const AdminDashboard = () => {
                                     <tr
                                         key={item.id}
                                         className="hover:bg-orange-50/30 dark:hover:bg-gray-700/50 transition-colors group cursor-pointer"
-                                        onClick={() => setSelectedFeedback(item)}
+                                        onClick={() => navigate(`/admin/feedback/${item.id}`)}
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-medium">
                                             {new Date(item.date).toLocaleDateString()}
@@ -229,7 +215,7 @@ const AdminDashboard = () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        setSelectedFeedback(item);
+                                                        navigate(`/admin/feedback/${item.id}`);
                                                     }}
                                                     className="p-2 text-gray-400 hover:text-primary hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition-all"
                                                     title="Voir les détails"
@@ -256,131 +242,6 @@ const AdminDashboard = () => {
                 )}
             </div>
 
-            {/* Details Modal */}
-            {selectedFeedback && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <div
-                        className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"
-                        onClick={() => setSelectedFeedback(null)}
-                    ></div>
-                    <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all animate-fade-in border border-gray-100 dark:border-gray-700 flex flex-col">
-
-                        {/* Modal Header */}
-                        <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur z-10 px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-start">
-                            <div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Détails de la remontée</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-1">
-                                    <CalendarIcon className="h-4 w-4" />
-                                    Reçu le {new Date(selectedFeedback.date).toLocaleDateString()}
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => setSelectedFeedback(null)}
-                                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                            >
-                                <XMarkIcon className="h-6 w-6" />
-                            </button>
-                        </div>
-
-                        {/* Modal Content */}
-                        <div className="p-6 space-y-8">
-
-                            {/* Status and ID */}
-                            <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                                <div>
-                                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Statut actuel</span>
-                                    <div className={`mt-1 inline-flex px-3 py-1 rounded-full text-sm font-bold ${selectedFeedback.status === 'En attente' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
-                                        selectedFeedback.status === 'Traité' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                        }`}>
-                                        {selectedFeedback.status}
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Référence</span>
-                                    <div className="text-lg font-mono text-gray-900 dark:text-white">#{selectedFeedback.id}</div>
-                                </div>
-                            </div>
-
-                            {/* Author & Context Info */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-4">
-                                    <h4 className="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-700 pb-2">
-                                        <UserIcon className="h-4 w-4 text-primary" />
-                                        Auteur
-                                    </h4>
-                                    <div>
-                                        <div className="text-gray-900 dark:text-white font-semibold text-lg">{selectedFeedback.nom} {selectedFeedback.prenom}</div>
-                                    </div>
-                                </div>
-                                <div className="space-y-4">
-                                    <h4 className="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-700 pb-2">
-                                        <BuildingOfficeIcon className="h-4 w-4 text-primary" />
-                                        Contexte
-                                    </h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500 dark:text-gray-400">Société:</span>
-                                            <span className="font-medium text-gray-900 dark:text-white">{selectedFeedback.societe_agence}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500 dark:text-gray-400">Lieu:</span>
-                                            <span className="font-medium text-gray-900 dark:text-white">{selectedFeedback.lieu_client}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Problem Type */}
-                            <div className="space-y-3">
-                                <h4 className="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-700 pb-2">
-                                    <TagIcon className="h-4 w-4 text-primary" />
-                                    Type de problème
-                                </h4>
-                                <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-900/50 rounded-lg p-3 text-orange-800 dark:text-orange-300 font-medium inline-block">
-                                    {selectedFeedback.type_probleme}
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            <div className="space-y-3">
-                                <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-700 pb-2">Description</h4>
-                                <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl p-4 text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-                                    {selectedFeedback.description}
-                                </div>
-                            </div>
-
-                            {/* Action */}
-                            <div className="space-y-3">
-                                <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-700 pb-2">Action Entreprise / Suggérée</h4>
-                                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/50 rounded-xl p-4 text-blue-900 dark:text-blue-300 leading-relaxed whitespace-pre-wrap">
-                                    {selectedFeedback.action || "Aucune action spécifiée."}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Modal Footer */}
-                        <div className="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 rounded-b-2xl border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 sticky bottom-0">
-                            {/* Actions in details modal */}
-                            <select
-                                value={selectedFeedback.status}
-                                onChange={(e) => handleStatusChange(selectedFeedback.id, e.target.value)}
-                                className="rounded-lg border-gray-300 dark:border-gray-600 py-2 pl-3 pr-10 text-sm focus:border-primary focus:ring-primary font-semibold shadow-sm dark:bg-gray-700 dark:text-white"
-                            >
-                                <option value="En attente">En attente</option>
-                                <option value="En cours">En cours</option>
-                                <option value="Traité">Traité</option>
-                            </select>
-                            <button
-                                onClick={() => setSelectedFeedback(null)}
-                                className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
-                            >
-                                Fermer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
             {/* Delete Confirmation Modal */}
             {deletingFeedback && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
